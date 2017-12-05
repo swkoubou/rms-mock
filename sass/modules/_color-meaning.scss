@@ -1,0 +1,40 @@
+.color-meaning {
+  @extend .clearfix;
+  margin-bottom: 0;
+  > dt {
+    float: left;
+    clear: left;
+    &::after {
+      content: ':';
+    }
+  }
+  > dd { // == color-meaning__item
+    float: left;
+    margin-left: .5rem;
+  }
+  #{&}__item {
+    @at-root {
+      #{&}--non-active {
+        background-color: $lecture-non-active-bg-color;
+      }
+      #{&}--active {
+        background-color: $lecture-active-bg-color;
+      }
+      #{&}--taken {
+        background-color: $lecture-taken-bg-color;
+      }
+      #{&}--required {
+        color: $lecture-required-color;
+      }
+      #{&}--elective-required {
+        color: $lecture-elective-required-color;
+      }
+      #{&}--elective {
+        color: $lecture-elective-color;
+      }
+      #{&}--re-required {
+        color: $lecture-re-required-color;
+      }
+    }
+  }
+}
