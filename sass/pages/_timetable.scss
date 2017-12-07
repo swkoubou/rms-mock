@@ -1,13 +1,19 @@
-.table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
-    border-bottom: 3px double blue;
-}
-.tab-wrapper {
-    position: relative;
-}
-.credit-counter{
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin-bottom: 0;
-    width: auto;
+@import "../variables";
+.timetable {
+    .table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+        border-bottom: 3px double blue;
+    }
+    .tab-wrapper {
+        position: relative;
+    }
+    .currentYear {
+        margin-bottom: 5px;
+    }
+    .credit-counter{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        margin-bottom: 0;
+        width: auto;
+    }
 }
