@@ -1,0 +1,10 @@
+.fixed-area {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+  padding: .5rem 0;
+  background-color: #f0f0f0;
+  border-top: 1px solid #ccc;
+}
