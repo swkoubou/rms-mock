@@ -86,39 +86,12 @@
 						</tbody>
 				</table>
             </div>
-			<div class="alert alert-danger" role="alert"> CAP上限をオーバーしているため保存できません </div>
-            <!-- <div class="tab-content">{{message}}</div> -->
-				<!-- <div role="tabpanel" id="first" class="tab-pane fade in">
-						<div class="table-responsive">
-							<table class="table table-bordered timetable-view">
-								<thead>
-										<tr>
-											<th class="timetable-view__heading timetable-view__heading--season timetable-view__heading--vertical">
-												前期
-											</th>
-											<th class="timetable-view__heading timetable-view__heading--vertical">
-												月
-											</th>
-											<th class="timetable-view__heading timetable-view__heading--vertical">
-												火
-											</th>
-											<th class="timetable-view__heading timetable-view__heading--vertical">
-												水
-											</th>
-											<th class="timetable-view__heading timetable-view__heading--vertical">
-												木
-											</th>
-											<th class="timetable-view__heading timetable-view__heading--vertical">
-												金
-											</th>
-											<th class="timetable-view__heading timetable-view__heading--vertical">
-												土
-											</th>
-										</tr>
-								</thead>
-							</table>
-						</div>
-                </div> -->
+            <div class="alert alert-danger" role="alert"> CAP上限をオーバーしているため保存できません </div>
+            <div class="tab-content" v-show="subjects.length">
+                <div role="tabpanel" class="tab-pane fade in" id="first" :class="{ active: currentSeason === 0}">
+                    <timetable :timetables="subjects | season(1)" :season="1" />
+                </div>
+            </div>
                 <color-meaming></color-meaming>
                 <div class="fixed-area">
                     <fixed-area></fixed-area>

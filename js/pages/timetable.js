@@ -1,4 +1,3 @@
-// var timetable = require();
 
 var colorMeaming = {
   template: `
@@ -39,7 +38,6 @@ Vue.component('fixed-area', {
           <div class="btn-group dropup" role="group">
             <button class="btn btn-default dropdown-toggle" id="dropdownmenu" data-toggle="dropdown" title="印刷">
                 {{section}}
-                <i class="fa fa-bomb fa-lg"></i>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownmenu">
@@ -97,6 +95,46 @@ Vue.component('fixed-area', {
   },
 });
 
+Vue.component('timetable', {
+  template: `
+    <div class="table-responsive">
+        <table class="table table-bordered timetable-view">
+            <thead>
+            <tr>
+                <th class="timetable-view__heading timetable-view__heading--season timetable-view__heading--vertical">
+                    {{season === 0 ? '前期' : '後期'}}
+                </th>
+                <th class="timetable-view__heading timetable-view__heading--vertical"
+                    v-for="day in week">
+                    {{day}}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                <template v-for="t in time">
+                    <tr>
+                        <th class="timetable-time timetable-view__heading timetable-view__heading--time">
+                            {{t}}限
+                        </th>
+                        <td class="timetable-view__lecture-cell timetable-view__lecture"
+                            v-for="day in week.length">
+                            <!-- ｖ−ｉｆを利用することでsubjectsが降ってきてからmountできる -->
+                            <lectures-cell v-if="timetables.length" :timetables="timetables | cell(t, day, season)" :week="day" :time="t" :season="season" />
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+    `,
+  data() {
+    return {
+      week: ['月', '火', '水', '木', '金', '土'],
+      time: 5
+    };
+  },
+});
+
 
 new Vue({
     el: '#contents',
@@ -104,7 +142,34 @@ new Vue({
       firstMaxCredit: 26,
       secondMaxCredit: 26,
       subjects: [],
+      originalTimetables: [],
     },
+  created: function () {
+    //　ライフサイクルフック(インスタンスが生成された後)
+    var subjectPromise = $.getJSON('../js/json/subject.json');
+    var optionPromise = $.getJSON('../js/json/account.json');
+    $.when(subjectPromise, optionPromise).then(([subjects], [option]) => {
+      this.subjects = subjects.filter(subject => {
+        return subject.state !== 3;
+      });
+      this.originalTimetables = this.subjects
+        .map(subject => subject.timetable)
+        .reduce((memo, timetables) => {
+          timetables = timetables.map(timetable => {
+            return {
+              active: !!timetable.active,
+              subject_id: timetable.subject_id
+            };
+          });
+          return memo.concat(timetables);
+        }, []);
+      this.firstMaxCredit = option.first_cap_over;
+      this.secondMaxCredit = option.second_cap_over;
+    });
+  },
+  methods: {
+
+  },
     components: {
       'color-meaming': colorMeaming,
       // 'fixed-area': fixedArea
