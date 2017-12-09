@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/index.css">
   </head>
   <body>
-    <div id="wrapper" class=""> 
+    <div id="wrapper" class="requirement"> 
       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="global-nav">
           <div class="container">
               <div class="navbar-header">
@@ -28,10 +28,10 @@
               <div class="navbar-collapse collapse">
                 <!-- ログイン状態 -->
                   <ul class="nav navbar-nav">
-                      <li class=""><a href="">マイページ</a></li>
+                      <li class=""><a href="../index.html">マイページ</a></li>
                       <li class=""><a href="pages/timetable.html">時間割</a></li>
                       <li class=""><a href="">科目リスト</a></li>
-                      <li class=""><a href="">要件</a></li>
+                      <li class=""><a href="requirement.html">要件</a></li>
                       <li class=""><a href="">ツリー</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
@@ -62,9 +62,227 @@
       </nav>
 
       <!-- main -->
-      <main class="requirement">
-          <p class="app">sa</p>
+      <main class="container" id="contains">
+        <div class="row" v-cloak>
+            <div class="col-md-8 center-block">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active" role="presentation">
+                        <a href="#research" aria-controls="research" role="tab" data-toggle="tab">卒研着手要件</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#graduation"aria-controls="graduation" role="tab" data-toggle="tab">卒業要件</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#teacher"aria-controls="teacher" role="tab" data-toggle="tab">教職</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#curater"aria-controls="curater" role="tab" data-toggle="tab">学芸員</a>
+                    </li>
+                </ul>
+    
+                <div class="tab-content" v-show="promise && promise.state() === 'resolved'">
+                    <div class="tab-pane active" role="tabpanel" id="research">
+                        <div v-if="research1 && research2">
+                            <div class="table-responsive research2">
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th rowspan="2" colspan="1" class="research1-class-head">区分</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="research1-need-credit-head">必要</th>
+                                        <th class="research1-diff-credit-head">不足</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="r in research1">
+                                            <td v-for="item in r.list" class="research1-class1">
+                                                {{item.subject_class1}}
+                                            </td>
+                                            <td class="research1-need-credit"
+                                                :rowspan="r.list.length">
+                                                {{r.need_credit}}
+                                            </td>
+                                            <td class="research1-diff-credit"
+                                                :rowspan="r.list.length"
+                                                :class="{
+                                                    'alert-danger': r.diff_credit > 0,
+                                                    'alert-success': r.diff_credit === 0
+                                                }">
+                                                {{r.diff_credit}}
+                                            </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive research2">
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2">科目名</th>
+                                        <th>必要修得<br>科目数</th>
+                                        <th>完了</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template v-for="r2 in research2">
+                                            <template v-for="group in r2.group">
+                                                <tr v-for="subjects in group.subjects"
+                                                    :class="{
+                                                        'research2-start-row': subjects.rowspan2
+                                                    }"
+                                                >
+                                                    <td class="research2-subject1"
+                                                        :class="{
+                                                            'subject-active': subjects.status1 === 2,
+                                                            'subject-taken': subjects.status1 === 3
+                                                        }"
+                                                        :colspan="!subjects.subject2 ? 2 : 1"
+                                                    >
+                                                        {{subjects.subject1}}
+                                                    </td>
+                                                    <template v-if="subjects.subject2">
+                                                        <td :class="{
+                                                                'subject-active': status2 === 2,
+                                                                'subject-taken': status2 === 3
+                                                            }">
+                                                            {{subjects.subjects2}}
+                                                        </td>
+                                                    </template>
+                                                    <template v-if="subjects.rowspan1">
+                                                        <td :rowspan="subjects.rowspan1"
+                                                            class="research2-need-taken">
+                                                            {{group.need_taken}}
+                                                        </td>
+                                                    </template>
+                                                    <template v-if="subjects.rowspan2">
+                                                        <td class="research2-ok"
+                                                            :rowspan="subjects.rowspan2"
+                                                            :class="{
+                                                                'alert-success': r2.ok,
+                                                                'alert-danger': !r2.ok
+                                                            }">
+                                                            {{r2.ok ? '○' : '×'}}
+                                                        </td>
+                                                    </template>
+                                                </tr>
+                                            </template>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="alert alert-warning">
+                                <p>※複数の必要修得科目数グループがある場合は、どちらかの必要修得科目数を満たせば問題ありません。</p>
+                                <p>※1行に複数の科目名が存在する行は、いずれかの科目が履修済みになっていれば問題ありません。</p>
+                                <?php if ($_SESSION['account']['department_id'] === 'A') { ?>
+                                    <p>※臨床実習の着手要件です。</p>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div class="alert alert-danger text-center">
+                                本システムの卒研着手要件はあなたの所属している学科（コース）に対応していません。<br>
+                                対応まで今しばらくお待ちください。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="graduation">
+                        <div v-if="graduation">
+                            <div class="table-responsive graduation">
+                                <table class="table table-bordered table-condensed table-graduation">
+                                    <thead>
+                                    <tr>
+                                        <th rowspan="2" colspan="4" class="graduation-class-head">区分</th>
+                                        <th rowspan="2" class="graduation-type-head">必選別</th>
+                                        <th colspan="3" class="graduation-credit-head">単位</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="graduation-need-credit-head">必要</th>
+                                        <th class="graduation-diff-credit-head">不足</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="g in graduation">
+                                        <template v-if="g.display_class1">
+                                            <td class="graduation-class1"
+                                                :colspan="g.colspan1"
+                                                :rowspan="g.rowspan1"
+                                                >
+                                                {{g.subject_class1}}
+                                            </td>
+                                        </template>
+                                       <template v-if="g.display_class2">
+                                            <td class="graduation-class2"
+                                                :colspan="g.colspan2"
+                                                :rowspan="g.rowspan2"
+                                                :class="{
+                                                    'no-border': !g.subject_class2
+                                                }"
+                                                >
+                                                {{g.subject_class2}}
+                                            </td>
+                                        </template>
+                                        <template v-if="g.display_class3">
+                                            <td class="graduation-class3"
+                                                :colspan="g.colspan3"
+                                                :rowspan="g.rowspan3"
+                                                :class="{
+                                                    'no-border': !g.subject_class3
+                                                }"
+                                                >
+                                                {{g.subject_class3}}
+                                            </td>
+                                        </template>
+                                        <template v-if="g.display_class4">
+                                            <td class="graduation-class4"
+                                                :rowspan="g.rowspan4"
+                                                :class="{
+                                                    'no-border': !g.subject_class4
+                                                }"
+                                                >
+                                                {{g.subject_class4}}
+                                            </td>
+                                        </template>
+                                        <template v-if="g.subject_class1 !== '合計'">
+                                            <td class="graduation-type">
+                                                {{g.registration_type}}
+                                            </td>
+                                        </template>
+    
+                                        <td class="graduation-need-credit">
+                                            {{g.need_credit}}
+                                        </td>
+                                        <td class="graduation-diff-credit"
+                                            :class="{'alert-danger': g.diff_credit > 0,
+                                                'alert-success': g.diff_credit === 0
+                                            }">
+                                                {{g.diff_credit}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="alert alert-warning">
+                                <p>※学校で配布されている履修要綱とは表記が異なる場合があるので注意してください。</p>
+                                <p>※各行で必要単位数と不足単位数の集計をしています。</p>
+                                <p>※選択必修の取得単位数が必要単位数を超えた場合は選択の取得単位数に加算されます。</p>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div class="alert alert-danger text-center">
+                                本システムの卒業要件はあなたの所属している学科（コース）に対応していません。<br>
+                                対応まで今しばらくお待ちください。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-right">合計修得予定単位数：
+                    <span>{{totalCredit}}</span>
+                    </p>
+            </div>
+        </div>
       </main>
+
      <!-- Footer -->
       <footer class="container-fluid page-footer">
         <hr />

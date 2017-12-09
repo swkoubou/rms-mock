@@ -1,5 +1,107 @@
-.requirement {
-    .app {
-        font-size: 100px;
+/*
+ * subjectlist
+ */
+
+ .main {
+    max-width: 768px;
+    margin: 0 auto;
+}
+
+.requirement th {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+/*
+ * graduation
+ */
+
+.graduation-class1,
+.graduation-class2,
+.graduation-class3,
+.graduation-class4 {
+    width: 120px;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.graduation-type {
+    width: 80px;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.graduation-need-credit,
+.graduation-token-credit,
+.graduation-will-credit,
+.graduation-diff-credit {
+    width: 50px;
+    text-align: right;
+    vertical-align: middle !important;
+}
+.graduation {
+  table {
+    $bgColor: #fcfcfc;
+    background-color: $bgColor;
+    .no-border {
+        position: relative;
+        top: 0;
+        left: -1px;
+        background: $bgColor;
     }
+  }
+}
+
+
+/*
+ * research1
+ */
+
+.research1-class1 {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.research1-need-credit,
+.research1-token-credit,
+.research1-will-credit,
+.research1-diff-credit {
+    width: 50px;
+    text-align: right;
+    vertical-align: middle !important;
+}
+
+/*
+ * research2
+ */
+
+.research2 td {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.research2-subject1,
+.research2-subject1 {
+    width: 300px;
+}
+
+.research2-need-taken {
+    width: 80px;
+}
+
+.research2-ok {
+    width: 70px;
+}
+
+.subject-active {
+    background-color: powderblue;
+}
+
+.subject-taken {
+    background-color: lightgray;
+}
+
+.research2-start-row {
+    border-top-width: 2px !important;
+    border-top-style: solid !important;
 }
