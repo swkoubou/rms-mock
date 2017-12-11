@@ -6,3 +6,8 @@
 @import 'variables';
 
 body { padding-top: 52px; }
+.center-block{
+	&[class*='col-']{
+		float: none !important;
+	}
+}
