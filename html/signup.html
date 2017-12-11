@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>ホーム｜RMS</title>
+    <link rel="shortcut icon" href="../img/favicon-rms.ico">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <div id="wrapper" class="timetable">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="global-nav">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <span>
+                            <img src="../img/logo.png" width="68" height="18"></img>
+                        </span>
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                      <li><a href="<?php $this->linkTo('signin') ?>">ログイン</a></li>
+                  </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- main -->
+        <div class="container-fluid" id='contents' v-cloak>
+            <div class="row">
+                <div class="main">
+                    <h3 class="text-center">アカウント登録</h3>
+                    <form class="form-horizontal rms-form" role="form" method="POST">
+                        <label class="col-sm-3 control-label">ID</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="id" name="id" placeholder="ID" autocomplete="off" required>
+                            <p class="help-block">半角英数字4～16文字で入力してください。</p>
+                            <!-- ここでエラーのやつをさせる -->
+                            <div></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">パスワード</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="pw" name="pw" placeholder="Password" required>
+                                <p class="help-block">半角英数字4～16文字で入力してください</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">パスワード確認</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="pw" name="pw" placeholder="Password" required>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer class="container-fluid page-footer">
+            <hr />
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center" id="copyright">
+                        <p>
+                            <small>© 2012-
+                                <a href="">ソフトウェア工房</a> RMSProject</small>
+                        </p>
+                        <p>
+                            <address></address>
+                            <p>
+                            </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <script src="../js/vue.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <script src="../js/pages/timetable.js"></script>
+</body>
+
+</html>

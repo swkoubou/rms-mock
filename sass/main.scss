@@ -1,4 +1,11 @@
 @import 'pages/timetable';
+@import 'pages/signin';
 @import 'bootstrap';
 
 body { padding-top: 52px; }
+
+.rms-form {
+    max-width: 768px;
+    padding: 15px;
+    margin: 0 auto;
+}
