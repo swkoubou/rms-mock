@@ -1,4 +1,11 @@
 @import 'pages/timetable';
+
+@import 'modules/color-meaning';
+@import 'modules/fixed-area';
+
 @import 'bootstrap';
+@import 'font-awesome/font-awesome';
+@import 'variables';
 
 body { padding-top: 52px; }
+.nav-tabs { margin-bottom: 20px; }
