@@ -64,10 +64,10 @@
 		<div class="container" id='contents' v-cloak>
 			<div class="tab-wrapper">
 				<ul class="nav nav-tabs currentYear" role="tablist">
-						<li role="presentation" :class="{ active: currentYear === 0}"><a href="#first" data-toggle="tab">1年</a></li>
-						<li role="presentation" :class="{ active: currentYear === 1}"><a href="#second" data-toggle="tab">2年</a></li>
-						<li role="presentation" :class="{ active: currentYear === 2}"><a href="#third" data-toggle="tab">3年</a></li>
-						<li role="presentation" :class="{ active: currentYear === 3}"><a href="#fourth" data-toggle="tab">4年</a></li>
+						<li role="presentation"><a href="#first" data-toggle="tab">1年</a></li>
+						<li role="presentation"><a href="#second" data-toggle="tab">2年</a></li>
+						<li role="presentation"><a href="#third" data-toggle="tab">3年</a></li>
+						<li role="presentation"><a href="#fourth" data-toggle="tab">4年</a></li>
 				</ul>
 				<ul class="nav nav-tabs" role="tablist">
 						<li role="presentation" :class="{ active: currentSeason === 0}"><a href="#first" data-toggle="tab">前期</a></li>
@@ -77,19 +77,19 @@
 						<tbody>
 						<tr>
 							<th>前期</th>
-							<td class="success" :class="{ danger: firstCreditOver }">10 / {{firstMaxCredit}}</td>
+							<td class="success" :class="{ danger: firstCreditOver }">{{firstCredit}} / {{firstMaxCredit}}</td>
 							<th>後期</th>
-							<td class="success" :class="{ danger: secondCreditOver }">30 / {{secondMaxCredit}}</td>
+							<td class="success" :class="{ danger: secondCreditOver }">{{secondCredit}} / {{secondMaxCredit}}</td>
 							<th>合計単位数</th>
-							<td class="success" :class="{ danger: totalCreditOver }">200 / 20</td>
+							<td class="success" :class="{ danger: totalCreditOver }">{{totalCredit}} / 20</td>
 						</tr>
 						</tbody>
 				</table>
             </div>
             <div class="alert alert-danger" role="alert"> CAP上限をオーバーしているため保存できません </div>
             <div class="tab-content" v-show="subjects.length">
-                <div role="tabpanel" class="tab-pane fade in" id="first" :class="{ active: currentSeason === 0}">
-                    <timetable :timetables="subjects | season(1)" :season="1" />
+                <div role="tabpanel" class="tab-pane fade in" id="first">
+                    <!-- <timetable :timetables="subjects | season(1)" :season="1" /> -->
                 </div>
             </div>
                 <color-meaming></color-meaming>
