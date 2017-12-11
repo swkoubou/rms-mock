@@ -1,2 +1,4 @@
-css/index.*
-.sass-cache
+.sass-cache/
+*.css.map
+.idea/
+node_modules/

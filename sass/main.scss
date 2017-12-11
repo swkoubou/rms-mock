@@ -1,8 +1,15 @@
 @import 'pages/timetable';
+<<<<<<< HEAD
 @import 'pages/requirement';
+=======
+
+@import 'modules/color-meaning';
+@import 'modules/fixed-area';
+>>>>>>> 19468777f9b1e81c7c2dd21b9943871bdba7c8f4
 
 @import 'bootstrap';
 @import 'font-awesome/font-awesome';
 @import 'variables';
 
 body { padding-top: 52px; }
+.nav-tabs { margin-bottom: 20px; }
