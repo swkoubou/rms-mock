@@ -12,4 +12,12 @@
 @import 'variables';
 
 body { padding-top: 52px; }
+<<<<<<< HEAD
 .nav-tabs { margin-bottom: 20px; }
+=======
+.center-block{
+	&[class*='col-']{
+		float: none !important;
+	}
+}
+>>>>>>> 899a69ad9e6413dcf3aa9517d91f18eee578e1c4
