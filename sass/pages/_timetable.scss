@@ -1,19 +1,187 @@
 @import "../variables";
+
 .timetable {
-    .table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
-        border-bottom: 3px double blue;
+  .container {
+    position: relative;
+  }
+  .timetable-view {
+    $line-height: 1.5;
+    margin: 0 0 2rem;
+    $active-bg: $lecture-active-bg-color;
+    table-layout: fixed;
+    #{&}__lecture-cell{
+      // Override Bootstrap's default padding
+      padding: 0 !important;
     }
-    .tab-wrapper {
-        position: relative;
+    #{&}__lecture-list{
+      position: relative;
+      padding: 0;
+      margin: 0 0 0 -1px;
+      height: 130px;
+      overflow : auto;
+      list-style-type:  none;
+      border-left: 1px solid $table-border-color;
+
     }
-    .currentYear {
-        margin-bottom: 5px;
+    #{&}__lecture-list--active {
+      border-left: 3px double darken($active-bg, 30%);
+      opacity: 1;
     }
-    .credit-counter{
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        margin-bottom: 0;
-        width: auto;
+    #{&}__heading {
+      text-align: center;
+      vertical-align: middle;
+      padding: .5rem;
     }
+    #{&}__heading--vertical{
+      border-bottom: 3px double $table-border-color;
+    }
+    #{&}__heading--time {
+      border-right: 3px double $table-border-color;
+    }
+    #{&}__heading--season {
+      width: 5rem;
+      border-right: 3px double $table-border-color;
+    }
+    #{&}__subject {
+      border-bottom: 1px solid $table-border-color;
+      background-color: $body-bg;
+      cursor: pointer;
+      position: relative;
+      line-height: $line-height;
+      width: 100%;
+      &:hover {
+        background-color: #eee;
+      }
+    }
+    #{&}__detail-icon {
+      color: #808080;
+      padding: .5rem 2rem .5rem .5rem;
+      position: relative;
+      width: 2rem;
+      display: table-cell;
+      text-align: center;
+      display: block;
+      position: absolute;
+      right: 0;
+      top: .14rem * $line-height;
+      z-index: 3;
+      opacity: 0;
+      transition: opacity .1s ease;
+      text-decoration: none;
+      background-color: inherit;
+      transition: all .2s ease;
+      &:hover {
+        opacity: 1;
+        color: #101010;
+      }
+    }
+    #{&}__subject-name{
+      display: block;
+      padding: .4rem .5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all .2s ease;
+      &:hover{
+        &:active {
+          background-color: darken($active-bg, 5%);
+          + .timetable__detail-icon {
+            background-color: darken($active-bg, 5%);
+          }
+        }
+        + .timetable__detail-icon {
+          opacity: 1;
+          background-color: #eee;
+        }
+      }
+    }
+    #{&}__subject--non-active {
+    }
+    #{&}__subject--active {
+      background-color: $active-bg;
+      &:hover {
+        background-color: darken($active-bg, 10%);
+        + .timetable__detail-icon {
+          opacity: 1;
+          background-color: darken($active-bg, 10%);
+        }
+      }
+    }
+    #{&}__subject--required {
+      color: $lecture-required-color;
+    }
+    #{&}__subject--elective {
+      color: $lecture-elective-color;
+    }
+    #{&}__subject--elective-required {
+      color: $lecture-elective-required-color;
+    }
+    #{&}__subject--re-required {
+      color: $lecture-re-required-color;
+    }
+
+    #{&}__small-heading{
+      font-size: .8rem;
+      color: #888;
+      padding: .2rem .5rem;
+      margin: 1rem 0 0;
+      border-bottom: 3px double $table-border-color;
+    }
+    #{&}__detail-view {
+      padding: 3rem 1rem 1rem !important; // override bootstrap default padding
+      transition: all .2s ease;
+      background-color: #fcfcfc;
+      box-shadow: inset 0 0 50px 5px #f0f0f0;
+      position: relative;
+      overflow: hidden;
+    }
+    #{&}__detail-view--show {
+      display: table-cell;
+      padding: 3rem 1rem 1rem !important;
+      min-height: 100px;
+      height: 100px;
+      overflow: visible;
+
+    }
+    #{&}__detail-close {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      cursor: pointer;
+      display: block;
+
+    }
+    #{&}__subject-detail {
+      > dt, > dd {
+        margin-top: .5rem;
+        float: left;
+      }
+      > dt {
+        width: 6rem;
+        clear: left;
+      }
+    }
+    #{&}__detail-heading{
+      margin: .5rem 0;
+      padding: .5rem .3rem;
+      border-bottom: 1px solid #ddd;
+      box-shadow: 0 2px 12px -5px #ccc;
+    }
+    #{&}__detail-left-view, #{&}__detail-center-view {
+    }
+    #{&}__detail-right-view {
+
+    }
+  }
+
+  .tab-wrapper {
+    position: relative;
+  }
+
+  .credit-counter{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 0;
+    width: auto;
+  }
 }

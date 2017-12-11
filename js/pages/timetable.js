@@ -15,12 +15,8 @@ var colorMeaming = {
     </div>
   `
 };
-var data = { 
-  year: '1年',
-  section: '後期'
- };
+
 Vue.component('fixed-area', {
-  // props: ['message'],
   template: `
     <div class="container">
         <div class="btn-group dropup" role="group">
@@ -46,7 +42,7 @@ Vue.component('fixed-area', {
             </ul>
         </div>
         <!-- <div class="btn-group">
-            <button class="btn btn-default" @click="changeActiveAllRequired" data-toggle="tooltip" title="必修科目をすべて選択">
+            <button class="btn btn-default" @click="" data-toggle="tooltip" title="必修科目をすべて選択">
                     <span class="glyphicon glyphicon-plus-sign"></span> 必修科目をすべて選択
             </button>
             <div class="btn-group dropup" role="group">
@@ -64,7 +60,7 @@ Vue.component('fixed-area', {
 
         <div class="relative pull-right">
           <div class="btn-group">
-            <button class="btn btn-default" @click="changeActiveAllRequired" data-toggle="tooltip" title="必修科目をすべて選択">
+            <button class="btn btn-default" @click="" data-toggle="tooltip" title="必修科目をすべて選択">
               <span class="glyphicon glyphicon-plus-sign"></span> 必修科目をすべて選択
             </button>
             <div class="btn-group dropup" role="group">
@@ -88,10 +84,12 @@ Vue.component('fixed-area', {
               </button>
           </div>
         </div>
-    </div>
-  `,
-  data: function () {
-    return data
+    </div>`,
+  data() {
+    return {
+      year: '1年',
+      section: '後期'
+    };
   },
 });
 
@@ -103,7 +101,139 @@ const toSeason = month => {
 const FIRST_SEASON = 1;
 const SECOND_SEASON = 2;
 
+Vue.component('lecture', {
+  props: ['timetable', 'time', 'week', 'season'],
+  data() {
+    return {
+      secondPeriodMode: false, // 後期モード（前期履修済科目に対応する）
+      subject: this.$root.findSubject(this.timetable.subject_id)
+    };
+  },
+  watch: {
+    active(val) {
+      this.$emit('update', this.timetable, this.subject, val);
+    }
+  },
+  template: `
+    <li class="timetable-view__subject" :class="{
+            'timetable-view__subject--active': active,
+            'timetable-view__subject--non-active': !active,
+            'timetable-view__subject--required': subject.registration_type_id === 1,
+            'timetable-view__subject--elective': subject.registration_type_id === 3,
+            'timetable-view__subject--elective-required': subject.registration_type_id === 2,
+            'timetable-view__subject--re-required': timetable.retake
+        }"
+        v-if="season === timetable.season"
+        >
+        <span class="timetable-view__subject-name"
+            v-show="visible"
+            @click="toggleActive">
+            {{subject.name}}
+            <span v-if="subject.registration_type_id === 5 || subject.registration_type_id === 6"
+                class="timetable-view__subject--limited">
+                (履修制限)
+            </span>
+            <span class="timetable-view__subject--recommend"
+                v-if="subject.registration_type_id === 7">
+                (推奨)
+            </span>
+        </span>
+        <a class="timetable-view__detail-icon glyphicon glyphicon-info-sign"
+            @click.stop
+            :href="detailLink"
+            aria-hidden="true"
+            target="_brank"
+            >
+        </a>
+    </li>`,
+  computed: {
+    visible() {
+      if (!this.secondPeriodMode) {
+        return true;
+      }
+      // return this.subject.timetable.season !== 2 || x.season !== 1 || x.state() !== 2;
+    },
+    active() {
+      return this.timetable.active;
+    },
+    detailLink() {
+      let path = window.location.href;
+      path = path.replace('/timetable', '');
+      return `${path}/subjectlist/${this.subject.subject_id}`;
+    }
+  },
+  created() {
+    // XXX: 各timetableのtimetable情報に対してactiveかの情報をreactiveにする
+    this.subject.timetable.forEach(t => {
+      this.$set(t, 'active', !!t.active);
+    });
+  },
+});
+
+Vue.component('lectures-cell', {
+  props: {
+    timetables: {
+      type: Array,
+      default: () => []
+    },
+    time: Number,
+    week: Number,
+    season: Number
+  },
+  data() {
+    return {
+      grade: this.$root.grade,
+      // 必選別でソート
+      sortedTimetable: this.timetables.sort((x, y) => {
+        // 再履修は一番下
+        // （選択）必修科目が優先
+        if (x.retake - y.retake !== 0) {
+          return x.retake > y.retake;
+        } else {
+          const xSubject = this.$root.findSubject(x.subject_id);
+          const ySubject = this.$root.findSubject(y.subject_id);
+          return xSubject.registration_type_id > ySubject.registration_type_id;
+        }
+      })
+    };
+  },
+  template: `
+    <ul class="timetable-view__lecture-list" :class="{'timetable-view__lecture-list--active': select}">
+        <lecture :timetable="lecture" v-for="lecture in normalLecture" :time="time" :week="week" @update="exclude" :season="season" />
+        <li v-show="existLowerLecture" class="timetable-view__small-heading">(下位学年科目)</li>
+        <lecture :timetable="lecture" v-for="lecture in lowerLecuture" :time="time" :week="week" @update="exclude" :season="season" />
+
+    </ul>`,
+  computed: {
+    select() {
+      return this.sortedTimetable.some(timetable => timetable.active);
+    },
+    lowerLecuture() {
+      return this.sortedTimetable.filter(timetable => {
+        return timetable.grade < this.grade;
+      });
+    },
+    existLowerLecture() {
+      return this.lowerLecuture.length > 0;
+    },
+    normalLecture() {
+      return this.sortedTimetable.filter(timetable => {
+        return timetable.grade === this.grade;
+      });
+    }
+  },
+  methods: {
+
+  },
+});
+
 Vue.component('timetable', {
+  props: {
+    timetables: {
+      type: Array
+    },
+    season: Number
+  },
   template: `
     <div class="table-responsive">
         <table class="table table-bordered timetable-view">
@@ -127,14 +257,13 @@ Vue.component('timetable', {
                         <td class="timetable-view__lecture-cell timetable-view__lecture"
                             v-for="day in week.length">
                             <!-- ｖ−ｉｆを利用することでsubjectsが降ってきてからmountできる -->
-                            <lectures-cell v-if="timetables.length" :timetables="timetables | cell(t, day, season)" :week="day" :time="t" :season="season" />
+                            <lectures-cell v-if="timetables.length" :timetables="timetables" :week="day" :time="t" :season="season" />
                         </td>
                     </tr>
                 </template>
             </tbody>
         </table>
-    </div>
-    `,
+    </div>`,
   data() {
     return {
       week: ['月', '火', '水', '木', '金', '土'],
@@ -175,7 +304,6 @@ new Vue({
         //     });
         //     return memo.concat(timetables);
         //   }, []);
-        console.log(this.subjects);
         this.firstMaxCredit = option.first_cap_over;
         this.secondMaxCredit = option.second_cap_over;
       });
@@ -193,7 +321,6 @@ new Vue({
           })
           if (includedCap && anyActive)
             memo += subject.credit;
-            console.log(memo);
           return memo;
         }, 0);
       },
@@ -251,15 +378,15 @@ new Vue({
         return this.creditOver || !this.changeState;
       }
     },
-    filters: {
-      season(subjects, season = 0) {
-        return subjects.map(subject => {
-          return subject.timetable.filter(timetable => {
-            return timetable.season === season;
-          });
-        }).reduce((res, timetables) => res.concat(timetables), []);
-      }
-    },
+    // filters: {
+    //   season(subjects, season) {
+    //     return subjects.map(subject => {
+    //       return subject.timetable.filter(timetable => {
+    //         return timetable.season === season;
+    //       });
+    //     }).reduce((res, timetables) => res.concat(timetables), []);
+    //   }
+    // },
     components: {
       'color-meaming': colorMeaming,
       // 'fixed-area': fixedArea

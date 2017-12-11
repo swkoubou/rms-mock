@@ -40,7 +40,7 @@
                           </a>
                           <ul class="dropdown-menu">
                               <li class="navbar-link">
-                                  <a href="<?php $this->linkTo('accountSettings') ?>">
+                                  <a href="">
                                       <span class="glyphicon glyphicon-wrench"></span> 設定
                                   </a>
                               </li>
@@ -88,15 +88,18 @@
             </div>
             <div class="alert alert-danger" role="alert"> CAP上限をオーバーしているため保存できません </div>
             <div class="tab-content" v-show="subjects.length">
-                <div role="tabpanel" class="tab-pane fade in" id="first">
+                <div role="tabpanel" class="tab-pane fade in active" id="first">
                     <!-- <timetable :timetables="subjects | season(1)" :season="1" /> -->
+                    <!-- Filterなし -->
+                    <timetable :timetables="subjects" :season="1" />
                 </div>
             </div>
                 <color-meaming></color-meaming>
                 <div class="fixed-area">
                     <fixed-area></fixed-area>
                 </div>
-		</div>
+                 {{subjects}}
+        </div>
      <!-- Footer -->
       <footer class="container-fluid page-footer">
         <hr />
